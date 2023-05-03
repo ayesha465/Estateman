@@ -4,8 +4,8 @@ const bodyParser = require("body-parser");
 const app = express();
 const dotenv = require("dotenv");
 const db = require("./config/db").get("${process.env.NODE_ENV}");
-const User = require('./routes/User');
-
+const User = require('./routes/admin');
+const user = require('./routes/User');
 
 const cors = require("cors");
 app.use(cors(corsOptions));
@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use('/users', User);
-
+app.use('/', user);
 
 
 const mongoose = require("mongoose");

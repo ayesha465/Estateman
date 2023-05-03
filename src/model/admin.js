@@ -13,24 +13,16 @@ var userSchema = mongoose.Schema({
     },
     
    
-   Email: {
-        type: String,
-        required: true
-    },
-    Address: {
-        type: String,
-        required: true
-    },
-    contact: {
-        type: String,
-        required: true
-    },
-    cnic: {
+    Password: {
         type: String,
         required: true
     },
     
 });
 
-var Users = mongoose.model('User', userSchema);
-module.exports =Users;
+var User = mongoose.model('admin', userSchema);
+
+
+
+
+module.exports = User;
