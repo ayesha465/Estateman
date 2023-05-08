@@ -21,14 +21,30 @@ var userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    contact: {
+    Contact: {
         type: String,
         required: true
     },
-    cnic: {
+    CNIC: {
         type: String,
         required: true
     },
+    Password:{
+        type:String,
+        required: true
+    },
+    ConfirmPassword:{
+        type:String,
+        required: true
+    },
+    rights: {
+        type: [{
+          type: String,
+          enum: ['Add Property', 'Edit Property', 'View Property'],
+          required: true
+        }],
+        default: ['View Property']
+      }
     
 });
 

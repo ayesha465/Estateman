@@ -6,7 +6,8 @@ const dotenv = require("dotenv");
 const db = require("./config/db").get("${process.env.NODE_ENV}");
 const User = require('./routes/admin');
 const user = require('./routes/User');
-
+const property = require('./routes/Property');
+const Auction = require('./routes/Auction');
 const cors = require("cors");
 app.use(cors(corsOptions));
 
@@ -17,8 +18,8 @@ app.use(bodyParser.json());
 
 app.use('/users', User);
 app.use('/', user);
-
-
+app.use('/', property);
+app.use('/', Auction);
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 mongoose.connect(

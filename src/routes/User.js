@@ -18,4 +18,21 @@ router.post(
     
     controller.getAllUsers
   );
+
+  router.put(
+    '/EditUSER',
+    
+    controller.editUser
+  );
+  router.delete(
+    '/USER',
+    
+    controller.deleteUser
+  );
+  router.get(
+    '/SearchUser',
+    
+    controller.searchuser
+  );
+  
   module.exports = router;
