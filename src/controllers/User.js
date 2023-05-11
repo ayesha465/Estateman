@@ -184,7 +184,7 @@ const jwt = require("jsonwebtoken");
 
   exports.deleteUser = async (req, res) => {
     try {
-      const result = await Users.deleteOne({ _id: req.body.id });
+      const result = await Users.deleteOne({ _id: req.query.id });
       if (result.deletedCount === 0) {
         return res.status(404).json({
           success: false,

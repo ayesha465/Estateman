@@ -13,18 +13,18 @@ var PropertySchema = mongoose.Schema({
          
     },
         PropertyType: {
-            type: [{
+            
               type: String,
               enum: ['Residential', 'Commercial','Special Commercial'],
              
-            }],
+           
         },
             PropertyCategory: {
-                type: [{
+               
                   type: String,
                   enum: ['House', 'Penthouse','Apartment','Studio','Vila','Plot','Shop','Plaza','Agricultureland'],
                   
-                }],
+               
             },
     LandArea: {
         type: String,
@@ -85,18 +85,18 @@ var PropertySchema = mongoose.Schema({
             
         },
         Gas: {
-            type: [{
+          
               type: String,
               enum: ['Yes', 'No'],
               
-            }],
+          
         },
         Electricity: {
-            type: [{
+            
               type: String,
               enum: ['Yes', 'No'],
               
-            }],
+          
         },
         images: [{ type: String }],
     },
@@ -150,12 +150,12 @@ var PropertySchema = mongoose.Schema({
             
         },
         OccupancyStatus: {
-            type: [{
+           
               type: String,
               enum: ['Occupied'
               , 'Vacant','Sold','NotSold'],
               
-            }],
+           
         },
         images: [{ type: String }],
           CallDetails: [{
@@ -191,7 +191,7 @@ var PropertySchema = mongoose.Schema({
             type: Date,
           },
     }
-
+    
     
 })
 

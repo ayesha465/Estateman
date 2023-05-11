@@ -31,6 +31,11 @@ router.post(
     '/LeaseDue',
     controller.getLeaseDue
   );
+  router.get(
+    '/UnitsSold',
+    controller.getUnitSold
+  );
+
 
 
 module.exports = router;

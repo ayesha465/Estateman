@@ -331,17 +331,75 @@ exports.searchproperty = async (req, res) => {
   }
 };
 
+
+
+
+
 exports.getLeaseDue = (req, res) => {
   const { currentDate } = req.body;
-  const currentDateObj = new Date(currentDate);
-  const oneMonthFromNow = new Date();
-  oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
 
   Property.find({
-    LeaseExpiringOn: { $lt: currentDate } // expired leases
+    $or: [
+      {
+        "AddHistory.LeaseExpiringOn": {
+          $lt: new Date(currentDate)
+        }
+      },
+      {
+        "AddHistory.LeaseExpiringOn": {
+          $gte: new Date(currentDate),
+          $lte: new Date(currentDate).setMonth(new Date(currentDate).getMonth() + 1)
+        }
+      }
+    ]
   })
     .then(properties => {
-      console.log("Properties found:", properties);
+      const expiringProperties = properties.map(property => {
+        const leaseExpiringOn = property.AddHistory.LeaseExpiringOn;
+        const expirationDate = new Date(leaseExpiringOn);
+
+        if (expirationDate.getTime() < new Date(currentDate).getTime()) {
+          return {
+            ...property.toObject(),
+            message: "Property has expired."
+          };
+        } else {
+          return {
+            ...property.toObject(),
+            message: "Property is expiring within one month."
+          };
+        }
+      });
+
+      const msg = {
+        success: true,
+        message: "Properties retrieved successfully",
+        data: expiringProperties,
+        status: 200
+      };
+      return res.json(msg);
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to retrieve properties",
+        status: 500
+      });
+    });
+};
+
+exports.getUnitSold = (req, res) => {
+  Property.find(req.body)
+    .then(properties => {
+      if (properties.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "No properties found with ContractType 'Rent'",
+          status: 404
+        });
+      }
+
       const msg = {
         success: true,
         message: "Properties retrieved successfully",
@@ -359,4 +417,41 @@ exports.getLeaseDue = (req, res) => {
       });
     });
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
