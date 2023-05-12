@@ -272,7 +272,7 @@ exports.getAllProperties = (req, res) => {
 
 exports.getLeaseProperty = (req, res) => {
   console.log("dss",req.body)
-  Property.find( req.body )
+  Property.find( req.query )
     .then(properties => {
       const msg = {
         success: true,
@@ -296,7 +296,7 @@ exports.searchproperty = async (req, res) => {
   try {
       const user = await Property.findOne({
           $or: [
-              { Title: req.body.Title },
+              { Title: req.query.Title},
              
           ]
       });
@@ -310,19 +310,12 @@ exports.searchproperty = async (req, res) => {
       const msg = {
           success: "true",
           message: "property retrieved successfully",
-          data: {
-              id: user._id,
-              Price: user.Price,
-              Units: user.Units,
-              YearBuilt: user.YearBuilt,
-              Title: user.Title,
-              Location: user.Location,
-              
-          },
+          data: user,
           Status: 200,
       };
       return res.json(msg);
   } catch (err) {
+    console.log(err)
       return res.status(500).json({
           success: "false",
           message: "Failed to return",
@@ -336,7 +329,7 @@ exports.searchproperty = async (req, res) => {
 
 
 exports.getLeaseDue = (req, res) => {
-  const { currentDate } = req.body;
+  const { currentDate } = req.query;
 
   Property.find({
     $or: [
@@ -390,7 +383,7 @@ exports.getLeaseDue = (req, res) => {
 };
 
 exports.getUnitSold = (req, res) => {
-  Property.find(req.body)
+  Property.find(req.query)
     .then(properties => {
       if (properties.length === 0) {
         return res.status(404).json({

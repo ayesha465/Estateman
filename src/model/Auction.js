@@ -7,11 +7,11 @@ var AuctionSchema = mongoose.Schema({
     
     
         Auctioneer: {
-            type: [{
+        
               type: String,
               enum: ['Bank', 'Government'],
              
-            }],
+        
         },
            
     Title: {
