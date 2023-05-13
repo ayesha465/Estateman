@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const formparser=require('express-fileupload')
 
 const app = express();
 const dotenv = require("dotenv");
@@ -10,6 +11,8 @@ const property = require('./routes/Property');
 const Auction = require('./routes/Auction');
 const cors = require("cors");
 app.use(cors(corsOptions));
+app.use(formparser());
+
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));

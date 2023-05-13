@@ -98,14 +98,17 @@ var PropertySchema = mongoose.Schema({
               
           
         },
-        images: [{ type: String }],
+        images: [
+            {
+                type: String,
+                
+            }
+          ]
     },
-    AddCommision:{
+    AddCommission:{
         Amount: {
             type: String,
-            
         },
-       
         Cheque: {
             type:String,
         },
@@ -159,24 +162,29 @@ var PropertySchema = mongoose.Schema({
         },
         images: [{ type: String }],
           CallDetails: [{
-            from: {
+            Date: {
                 type: Date,
+            },
+            From: {
+                type: String,
                 required: true,
             },
-            to: {
-                type: Date,
+            Name: {
+                type: String,
+            },
+            To: {
+                type: String,
                 required: true,
             },
-            type: {
+            /*type: {
                 type: String,
                 enum: ['IncomingCallRecord', 'OutgoingCallRecord'],
                 required: true,
-            },
-            description: {
-                type: String,
-            },
+            },*/     
+            
+        
         }],
-        AddPricingHistroy: [{
+        AddPricingHistory: [{
             year: {
                 type: Number,
                 required: true,

@@ -1,11 +1,19 @@
 const config = require("../config/auth");
 const bcrypt = require('bcrypt');
 BCRYPT_SALT = 10;
-
-
-
+//const upload = require (.../middleware/upload)
+//const multer  = require('multer')
+//const upload = multer({ dest: 'uploads/', limits: { files: 10 } }).array('images', 10);
+ // Specify the destination folder for uploaded files
+const fs = require('fs');
+const path = require('path');
  const Property = require("../model/Property");
+ //const folderPath = 'C:/Users/wtics/Downloads/uploads';
+ const formparser=require('express-fileupload')
 
+
+ // Configure multer to handle file uploads from a specific folder
+ 
 
 
 
@@ -48,9 +56,66 @@ exports.addProperty = async (req, res) => {
     }
 };
 
-
-
 exports.updateProperty = async (req, res) => {
+  try {
+    const id = req.query.id;
+    const property = await Property.findByIdAndUpdate(id, req.body);
+
+    if (!property) {
+      return res.status(404).json({
+        success: false,
+        message: 'Property not found',
+        status: 404,
+      });
+    }
+
+    if (req.files && req.files.images && req.files.images.length > 0) {
+      const image = req.files.images[0];
+      const imageExtension = path.extname(image.name);
+      const imagePath = `uploads/${property.id}${imageExtension}`;
+
+      image.mv(imagePath, async (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({
+            success: false,
+            message: 'Failed to upload image',
+            status: 500,
+          });
+        }
+
+        property.imagePath = imagePath;
+        await property.save();
+
+        const msg = {
+          success: true,
+          message: 'Property updated successfully',
+          data: property,
+          status: 200,
+        };
+
+        return res.status(200).json(msg);
+      });
+    } else {
+      const msg = {
+        success: true,
+        message: 'Property updated successfully',
+        data: property,
+        status: 200,
+      };
+
+      return res.status(200).json(msg);
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to update Property',
+      status: 500,
+    });
+  }
+};
+/*exports.updateProperty = async (req, res) => {
   try {
     const id = req.query.id;
     
@@ -80,9 +145,7 @@ exports.updateProperty = async (req, res) => {
       status: 500,
     });
   }
-};
-
-
+};*/
 
 
 
