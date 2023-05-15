@@ -160,6 +160,12 @@ var PropertySchema = mongoose.Schema({
               
            
         },
+        Calltype: {
+            type: String,
+            enum: ['IncomingCallRecord', 'OutgoingCallRecord'],
+            required: true,
+        },
+        
         imagePath:
          [
             { type: String }
@@ -179,11 +185,7 @@ var PropertySchema = mongoose.Schema({
                 type: String,
                 required: true,
             },
-            Calltype: {
-                type: String,
-                enum: ['IncomingCallRecord', 'OutgoingCallRecord'],
-                required: true,
-            },
+            
             
         
         }],
