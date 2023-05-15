@@ -1,35 +1,55 @@
-
+//const path = require('path');
  const Auctions = require("../model/Auction");
 
-exports.addauction = async (req, res) => {
-    try {
-        if (req.body.Auctioneer && !['Bank', 'Government'].includes(req.body.Auctioneer)) {
-            return res.status(400).json({
-                success: false,
-                message: `Invalid PropertyType value: ${req.body.Auctioneer}`,
-                status: 400
-            });
-        }
-        
-        console.log("x",req.body)
-       const user=await Auctions.create(req.body)
-        
-        const msg = {
-            success: "true",
-            message: "Auctions added successfully",
-            data: user,
-            Status: 201,
-        };
-        return res.status(201).json(msg);
-    } catch (err) {
-        console.log(err)
-        return res.status(500).json({
-            success: "false",
-            message: "Failed to Add",
-            Status: 500,
-        });
+ const path = require('path');
+
+ exports.addauction = async (req, res) => {
+  try {
+    if (req.body.Auctioneer && !['Bank', 'Government'].includes(req.body.Auctioneer)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid PropertyType value: ${req.body.Auctioneer}`,
+        status: 400
+      });
     }
+
+    let imagePaths = [];
+    if (req.files && req.files.imagePath && req.files.imagePath.length > 0) {
+      // Handle image file upload
+      imagePaths = req.files.imagePath.map((image) => {
+        const imageExtension = path.extname(image.name);
+        const imagePath = `src/uploads/${Date.now()}${imageExtension}`; // Generate a unique filename
+        image.mv(imagePath);
+        return imagePath;
+      });
+    }
+    console.log('imagePaths:', imagePaths);
+
+    const auctionData = {
+      ...req.body
+    };
+
+    const user = await Auctions.create(auctionData);
+    user.imagePath = imagePaths;
+    await user.save();
+
+    const msg = {
+      success: true,
+      message: "Auctions added successfully",
+      data: user,
+      status: 201,
+    };
+    return res.status(201).json(msg);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to Add",
+      status: 500,
+    });
+  }
 };
+
 exports.getAllAuction = (req, res) => {
     Auctions.find({})
     .then(actions => {

@@ -38,11 +38,8 @@ var userSchema = mongoose.Schema({
         required: true
     },
     rights: {
-        type: [{
-          type: String,
-          enum: ['Add Property', 'Edit Property', 'View Property'],
-          required: true
-        }],
+        type: [String],
+        enum: ['Add Property', 'Edit Property', 'View Property'],
         default: ['View Property']
       }
     

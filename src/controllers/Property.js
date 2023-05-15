@@ -69,33 +69,48 @@ exports.updateProperty = async (req, res) => {
       });
     }
 
-    if (req.files && req.files.images && req.files.images.length > 0) {
-      const image = req.files.images[0];
-      const imageExtension = path.extname(image.name);
-      const imagePath = `uploads/${property.id}${imageExtension}`;
+    if (req.files && req.files.imagePath && req.files.imagePath.length > 0) {
+      const imagePaths = [];
 
-      image.mv(imagePath, async (err) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json({
-            success: false,
-            message: 'Failed to upload image',
-            status: 500,
-          });
-        }
+      for (let i = 0; i < req.files.imagePath.length; i++) {
+        const image = req.files.imagePath[i];
+        const imageExtension = path.extname(image.name);
+        const imagePath = `src/uploads/${property.id}_${i}${imageExtension}`;
 
-        property.imagePath = imagePath;
-        await property.save();
+        image.mv(imagePath, async (err) => {
+          if (err) {
+            console.error(err);
+            return res.status(500).json({
+              success: false,
+              message: 'Failed to upload image',
+              status: 500,
+            });
+          }
 
-        const msg = {
-          success: true,
-          message: 'Property updated successfully',
-          data: property,
-          status: 200,
-        };
+          imagePaths.push(imagePath);
 
-        return res.status(200).json(msg);
-      });
+          if (imagePaths.length === req.files.imagePath.length) {
+            if (property.PropertyDetails) {
+              property.PropertyDetails.imagePath = imagePaths;
+            }
+
+            if (property.AddHistory) {
+              property.AddHistory.imagePath = imagePaths;
+            }
+
+            await property.save();
+
+            const msg = {
+              success: true,
+              message: 'Property updated successfully',
+              data: property,
+              status: 200,
+            };
+
+            return res.status(200).json(msg);
+          }
+        });
+      }
     } else {
       const msg = {
         success: true,

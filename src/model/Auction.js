@@ -66,7 +66,7 @@ var AuctionSchema = mongoose.Schema({
         type: String,
         
     },
-    images: [{ type: String }],
+    imagePath: [{ type: String }],
 })
 var Auctions = mongoose.model('Auction',AuctionSchema)
 module.exports = Auctions;
