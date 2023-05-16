@@ -35,6 +35,10 @@ router.post(
     '/UnitsSold',
     controller.getUnitSold
   );
+  router.get(
+    '/getimageurl',
+    controller.getPropertyImageUrls
+  );
 
 
 
