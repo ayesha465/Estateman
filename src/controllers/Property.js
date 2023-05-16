@@ -73,46 +73,44 @@ exports.updateProperty = async (req, res) => {
     if (req.files && req.files.imagePath && req.files.imagePath.length > 0) {
       const imageUrls = [];
 
-      for (let i = 0; i < req.files.imagePath.length; i++) {
-        const image = req.files.imagePath[i];
+      const uploadPromises = req.files.imagePath.map((image) => {
         const imageExtension = path.extname(image.name);
-        const imagePath = `${property.id}${imageExtension}`;
+        const imagePath = path.join(__dirname, '../../public/uploads', `${property.id}${imageExtension}`);
 
-        image.mv(imagePath, async (err) => {
-          if (err) {
-            console.error(err);
-            return res.status(500).json({
-              success: false,
-              message: 'Failed to upload image',
-              status: 500,
-            });
-          }
-
-          const imageUrl = `public/uploads/${imagePath}`;
-          imageUrls.push(imageUrl);
-
-          if (imageUrls.length === req.files.imagePath.length) {
-            if (property.PropertyDetails) {
-              property.PropertyDetails.imagePath = imageUrls;
+        return new Promise((resolve, reject) => {
+          image.mv(imagePath, async (err) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            } else {
+              const imageUrl = `images/${property.id}${imageExtension}`;
+              imageUrls.push(imageUrl);
+              resolve();
             }
-
-            if (property.AddHistory) {
-              property.AddHistory.imagePath = imageUrls;
-            }
-
-            await property.save();
-
-            const msg = {
-              success: true,
-              message: 'Property updated successfully',
-              data: property,
-              status: 200,
-            };
-
-            return res.status(200).json(msg);
-          }
+          });
         });
+      });
+
+      await Promise.all(uploadPromises);
+
+      if (property.PropertyDetails) {
+        property.PropertyDetails.imagePath = imageUrls;
       }
+
+      if (property.AddHistory) {
+        property.AddHistory.imagePath = imageUrls;
+      }
+
+      await property.save();
+
+      const msg = {
+        success: true,
+        message: 'Property updated successfully',
+        data: property,
+        status: 200,
+      };
+
+      return res.status(200).json(msg);
     } else {
       const msg = {
         success: true,
@@ -150,11 +148,11 @@ exports.getPropertyImageUrls = async (req, res) => {
     const addHistoryImageUrls = property.AddHistory?.imagePath ?? [];
 
     const publicPropertyDetailsImageUrls = propertyDetailsImageUrls.map((imagePath) => {
-      return `images/${imagePath}`;
+      return `http://localhost:3000/${imagePath}`; // Update the base URL here
     });
 
     const publicAddHistoryImageUrls = addHistoryImageUrls.map((imagePath) => {
-      return `images/${imagePath}`;
+      return `https://localhost:3000/${imagePath}`; // Update the base URL here
     });
 
     const msg = {
