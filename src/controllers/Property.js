@@ -77,6 +77,7 @@ exports.updateProperty = async (req, res) => {
         const imageExtension = path.extname(image.name);
         const imagePath = `src/uploads/${property.id}_${i}${imageExtension}`;
 
+
         image.mv(imagePath, async (err) => {
           if (err) {
             console.error(err);
