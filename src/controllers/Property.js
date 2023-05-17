@@ -39,8 +39,8 @@ exports.addProperty = async (req, res) => {
             });
         }
         console.log("x",req.body)
-       const user=await Property.create(req.body)
-        
+       const user = await Property.create(req.body)
+        console.log('y',req.body)
         const msg = {
             success: "true",
             message: "property added successfully",
@@ -49,6 +49,7 @@ exports.addProperty = async (req, res) => {
         };
         return res.status(201).json(msg);
     } catch (err) {
+      console.log(err)
         return res.status(500).json({
             success: "false",
             message: "Failed to Add Property",
@@ -72,8 +73,9 @@ exports.updateProperty = async (req, res) => {
 
     if (req.files && req.files.imagePath && req.files.imagePath.length > 0) {
       const imageUrls = [];
-
+      console.log(req.files.imagePath.length)
       const uploadPromises = req.files.imagePath.map((image) => {
+        // console.log(req.files)
         const imageExtension = path.extname(image.name);
         const imagePath = path.join(__dirname, '../uploads', `${property.id}${imageExtension}`);
 

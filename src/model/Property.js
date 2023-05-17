@@ -163,7 +163,7 @@ var PropertySchema = mongoose.Schema({
         Calltype: {
             type: String,
             enum: ['IncomingCallRecord', 'OutgoingCallRecord'],
-            required: true,
+            
         },
         
         imagePath:
