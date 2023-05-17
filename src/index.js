@@ -12,8 +12,8 @@ const Auction = require('./routes/Auction');
 const cors = require("cors");
 app.use(cors(corsOptions));
 app.use(formparser());
-
-
+app.use("/images",express.static(__dirname + '/uploads'))
+console.log(__dirname)
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 

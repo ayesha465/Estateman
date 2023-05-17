@@ -57,10 +57,6 @@ exports.addProperty = async (req, res) => {
     }
 };
 
-
-
-
-
 exports.updateProperty = async (req, res) => {
   try {
     const id = req.query.id;
@@ -79,8 +75,8 @@ exports.updateProperty = async (req, res) => {
 
       const uploadPromises = req.files.imagePath.map((image) => {
         const imageExtension = path.extname(image.name);
-        const imagePath = path.join(__dirname, '../../public/uploads', `${property.id}${imageExtension}`);
-        console.log("s",imagePath)
+        const imagePath = path.join(__dirname, '../uploads', `${property.id}${imageExtension}`);
+
         return new Promise((resolve, reject) => {
           image.mv(imagePath, async (err) => {
             if (err) {
@@ -152,11 +148,11 @@ exports.getPropertyImageUrls = async (req, res) => {
     const addHistoryImageUrls = property.AddHistory?.imagePath ?? [];
 
     const publicPropertyDetailsImageUrls = propertyDetailsImageUrls.map((imagePath) => {
-      return `../../public/uploads/${imagePath}`; // Update the base URL here
+      return `http://localhost:3000/${imagePath}`; // Update the base URL here
     });
 
     const publicAddHistoryImageUrls = addHistoryImageUrls.map((imagePath) => {
-      return `../../public/uploads/${imagePath}`; // Update the base URL here
+      return `https://localhost:3000/${imagePath}`; // Update the base URL here
     });
 
     const msg = {
