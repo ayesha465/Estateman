@@ -5,20 +5,13 @@
 
  exports.addauction = async (req, res) => {
   try {
-    if (req.body.Auctioneer && !['Bank', 'Government'].includes(req.body.Auctioneer)) {
-      return res.status(400).json({
-        success: false,
-        message: `Invalid PropertyType value: ${req.body.Auctioneer}`,
-        status: 400
-      });
-    }
-
+   
     let imagePaths = [];
     if (req.files && req.files.imagePath && req.files.imagePath.length > 0) {
       // Handle image file upload
       imagePaths = req.files.imagePath.map((image) => {
         const imageExtension = path.extname(image.name);
-        const imagePath = `src/uploads/${Date.now()}${imageExtension}`; // Generate a unique filename
+        const imagePath = `../uploads/${Date.now()}${imageExtension}`; // Generate a unique filename
         image.mv(imagePath);
         return imagePath;
       });

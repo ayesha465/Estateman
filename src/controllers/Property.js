@@ -73,11 +73,12 @@ exports.updateProperty = async (req, res) => {
 
     if (req.files && req.files.imagePath && req.files.imagePath.length > 0) {
       const imageUrls = [];
+      // let count = 0
       console.log(req.files.imagePath.length)
-      const uploadPromises = req.files.imagePath.map((image) => {
+      const uploadPromises = req.files.imagePath.map((image,idx) => {
         // console.log(req.files)
         const imageExtension = path.extname(image.name);
-        const imagePath = path.join(__dirname, '../uploads', `${property.id}${imageExtension}`);
+        const imagePath = path.join(__dirname, '../uploads', `${idx}${imageExtension}`);
 
         return new Promise((resolve, reject) => {
           image.mv(imagePath, async (err) => {
