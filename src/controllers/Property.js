@@ -1,6 +1,6 @@
 const config = require("../config/auth");
 const bcrypt = require('bcrypt');
-
+const uuid = require ('uuid')
 BCRYPT_SALT = 10;
 //const upload = require (.../middleware/upload)
 //const multer  = require('multer')
@@ -73,12 +73,10 @@ exports.updateProperty = async (req, res) => {
 
     if (req.files && req.files.imagePath && req.files.imagePath.length > 0) {
       const imageUrls = [];
-      // let count = 0
-      console.log(req.files.imagePath.length)
-      const uploadPromises = req.files.imagePath.map((image,idx) => {
-        // console.log(req.files)
+      const uploadPromises = req.files.imagePath.map((image,) => {
+        const UUID = uuid.v4();
         const imageExtension = path.extname(image.name);
-        const imagePath = path.join(__dirname, '../uploads', `${idx}${imageExtension}`);
+        const imagePath = path.join(__dirname, '../uploads', `${UUID}${imageExtension}`);
 
         return new Promise((resolve, reject) => {
           image.mv(imagePath, async (err) => {
@@ -86,7 +84,7 @@ exports.updateProperty = async (req, res) => {
               console.error(err);
               reject(err);
             } else {
-              const imageUrl = `images/${property.id}${imageExtension}`;
+              const imageUrl = `images/${UUID}${imageExtension}`;
               imageUrls.push(imageUrl);
               resolve();
             }
@@ -155,7 +153,7 @@ exports.getPropertyImageUrls = async (req, res) => {
     });
 
     const publicAddHistoryImageUrls = addHistoryImageUrls.map((imagePath) => {
-      return `https://localhost:3000/${imagePath}`; // Update the base URL here
+      return `http://localhost:3000/${imagePath}`; // Update the base URL here
     });
 
     const msg = {
