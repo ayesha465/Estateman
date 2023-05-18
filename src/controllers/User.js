@@ -79,12 +79,14 @@ const jwt = require("jsonwebtoken");
           Contact: user.Contact,
           CNIC: user.CNIC,
           Password:user.Password,
-          ConfirmPassword:user.ConfirmPassword
+          ConfirmPassword:user.ConfirmPassword,
+          rights:user.rights
         },
         Status: 200,
       };
       return res.json(msg);
     } catch (err) {
+      console.log(err)
       return res.status(500).json({
         success: "false",
         message: "Failed to return  ",
@@ -102,7 +104,9 @@ const jwt = require("jsonwebtoken");
             Username: user.Username,
             Email: user.Email,
             Contact: user.Contact,
-          
+            CNIC: user.CNIC,
+            Password:user.Password,
+            ConfirmPassword:user.ConfirmPassword
           };
         });
         const msg = {
